@@ -1,0 +1,8 @@
+build/
+build-asan/
+install/
+log/
+__pycache__/
+*.pyc
+*.o
+*.exe

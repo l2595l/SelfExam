@@ -1,0 +1,45 @@
+name: exam-ci
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  debug2-cpp:
+    name: Debug_2 (C++ 测试)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 配置
+        run: cmake -S debug_2_cpp -B debug_2_cpp/build -DCMAKE_BUILD_TYPE=Debug
+
+      - name: 编译
+        run: cmake --build debug_2_cpp/build -j 4
+
+      - name: 功能测试
+        run: ./debug_2_cpp/build/run_tests
+
+      - name: AddressSanitizer 测试
+        if: always()
+        run: |
+          cmake -S debug_2_cpp -B debug_2_cpp/build-asan -DCMAKE_BUILD_TYPE=Debug \
+            -DCMAKE_CXX_FLAGS="-fsanitize=address -fno-omit-frame-pointer -g"
+          cmake --build debug_2_cpp/build-asan -j 4
+          ./debug_2_cpp/build-asan/run_tests
+
+  debug1-ros2:
+    name: Debug_1 (ROS2 编译)
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: ros-tooling/setup-ros@v0.7
+        with:
+          required-ros-distributions: humble
+
+      - name: colcon build
+        working-directory: debug_1_ros2
+        run: |
+          source /opt/ros/humble/setup.bash
+          colcon build --event-handlers console_direct+

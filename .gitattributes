@@ -1,0 +1,17 @@
+# 统一换行符：仓库内与工作区一律使用 LF
+# 原因：这个仓库要在 Ubuntu（ROS2 环境）里运行，
+#       若 run_tests.sh / *.py 被转成 CRLF，Linux 会报
+#       "bad interpreter: No such file or directory"
+* text=auto eol=lf
+
+*.sh    text eol=lf
+*.py    text eol=lf
+*.cpp   text eol=lf
+*.hpp   text eol=lf
+*.xml   text eol=lf
+*.md    text eol=lf
+*.txt   text eol=lf
+*.yml   text eol=lf
+*.msg   text eol=lf
+*.srv   text eol=lf
+*.action text eol=lf
