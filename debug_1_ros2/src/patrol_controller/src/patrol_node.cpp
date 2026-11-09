@@ -15,14 +15,14 @@ public:
   : Node("patrol_node")
   {
     pub_ = this->create_publisher<patrol_interfaces::msg::PatrolStatus>(
-      "patrol_status", rclcpp::QoS(rclcpp::KeepLast(10)).best_effort());
+      "patrol_status", 10);
 
     sub_ = this->create_subscription<patrol_interfaces::msg::PatrolStatus>(
       "patrol_status", 10,
       [this](const patrol_interfaces::msg::PatrolStatus::SharedPtr msg) {
         RCLCPP_INFO(
           this->get_logger(), "[patrol] target=%d battery=%.1f arrived=%s",
-          msg->count, msg->battery, msg->arrived ? "true" : "false");
+          msg->target_id, msg->battery, msg->arrived ? "true" : "false");
       });
 
     timer_ = this->create_wall_timer(500ms, [this]() {

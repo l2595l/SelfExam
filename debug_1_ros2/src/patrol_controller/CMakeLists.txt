@@ -10,12 +10,14 @@ find_package(rclcpp REQUIRED)
 find_package(patrol_interfaces REQUIRED)
 
 add_executable(patrol_node src/patrol_node.cpp)
-ament_target_dependencies(patrol_node rclcpp)
+ament_target_dependencies(patrol_node rclcpp patrol_interfaces)
 
-install(DIRECTORY launch/
+install(DIRECTORY launch
   DESTINATION share/${PROJECT_NAME}
 )
-
+install(TARGETS patrol_node
+  DESTINATION lib/${PROJECT_NAME}
+)
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
   set(ament_cmake_copyright_FOUND TRUE)
